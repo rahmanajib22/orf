@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Target, Menu, X, Rocket } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <header className="border-b-4 border-[#1A1A1A] bg-white relative z-50 shadow-sm" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           
-          {/* Logo Group */}
-          <div className="flex items-center gap-3 w-1/3">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-[#C0272D] flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-[4px_4px_0_#1A1A1A]">
-                <Target className="w-6 h-6 text-[#F0EDE8]" />
-              </div>
-              <div className="flex flex-col">
-                 <span className="font-cairo text-2xl font-black text-[#1A1A1A] tracking-tighter leading-none">إيدو فيليج</span>
-                 <span className="text-[10px] font-oswald tracking-[0.2em] font-bold text-gray-400 uppercase">System // On</span>
-              </div>
-            </Link>
-          </div>
-
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center justify-center gap-8 font-cairo w-1/3">
-            <Link to="/" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors">الرئيسية</Link>
-            <Link to="/community" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors underline decoration-4 decoration-[#C0272D]">الساحة</Link>
+            <Link 
+              to="/" 
+              className={`font-bold transition-colors ${isActive('/') ? 'text-[#C0272D] underline decoration-4 underline-offset-8' : 'text-[#1A1A1A] hover:text-[#C0272D]'}`}
+            >
+              الرئيسية
+            </Link>
+            <Link 
+              to="/community" 
+              className={`font-bold transition-colors ${isActive('/community') ? 'text-[#C0272D] underline decoration-4 underline-offset-8' : 'text-[#1A1A1A] hover:text-[#C0272D]'}`}
+            >
+              الساحة
+            </Link>
             <a href="#" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors">المدرسين</a>
           </nav>
 

@@ -105,6 +105,18 @@ export const Home: React.FC = () => {
   return (
     <div className="min-h-[100vh] bg-[#F0EDE8] py-16 px-4 sm:px-8 relative font-cairo z-0 overflow-x-hidden">
       
+      {/* SWINGING LIGHT ANIMATION */}
+      <motion.div 
+        animate={{ rotate: [-20, 20, -20] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="fixed top-0 left-1/4 -translate-x-1/2 z-40 pointer-events-none origin-top hidden lg:block"
+      >
+        <div className="w-[2px] h-48 bg-[#1A1A1A] mx-auto"></div>
+        <div className="w-12 h-12 bg-[#C0272D] border-4 border-[#1A1A1A] shadow-[0_0_50px_rgba(192,39,45,0.4)] flex items-center justify-center">
+            <div className="w-4 h-4 bg-white rounded-full blur-[2px] animate-pulse"></div>
+        </div>
+      </motion.div>
+
       {/* BACKGROUND DECO */}
       <div className="absolute top-0 right-0 w-full md:w-[50vw] h-full opacity-[0.03] pointer-events-none z-[-1] overflow-hidden" 
            style={{ backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, #000 10px, #000 20px)`}}>
@@ -144,6 +156,28 @@ export const Home: React.FC = () => {
               </p>
             </div>
         </header>
+
+        {/* FEATURED CAROUSEL SECTION */}
+        {!loading && profiles.length > 0 && (
+          <div className="mb-20 overflow-hidden relative pb-10">
+            <h3 className="text-xl font-black text-[#1A1A1A] mb-8 flex items-center gap-3" dir="rtl">
+               <span className="w-2 h-2 bg-[#C0272D]"></span> مدرسين متميزين // FEATURED
+            </h3>
+            <div className="flex gap-6 animate-carousel-move hover:pause">
+              <motion.div 
+                className="flex gap-6"
+                animate={{ x: [0, -1200] }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              >
+                {[...profiles.slice(0, 4), ...profiles.slice(0, 4)].map((p, idx) => (
+                  <div key={idx} className="w-72 flex-shrink-0">
+                    <ProfileCard profile={p} />
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        )}
 
         <FilterBar 
           searchTerm={searchTerm} 
