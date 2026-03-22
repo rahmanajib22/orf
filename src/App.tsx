@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Home } from './pages/Home';
 import { ProfileDetail } from './pages/ProfileDetail';
+import { Community } from './pages/Community';
 import { Header } from './components/Header';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
            <AnimatePresence mode="wait">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/community" element={<Community />} />
               <Route path="/profile/:id" element={<ProfileDetail />} />
             </Routes>
           </AnimatePresence>

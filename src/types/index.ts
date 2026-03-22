@@ -26,3 +26,21 @@ export interface Profile {
   tags?: string[];
   gender?: string;
 }
+
+export type PostType = 'article' | 'announcement' | 'roadmap';
+
+export interface CommunityPost {
+  id: string;
+  author_id?: string;
+  author_name?: string;
+  author_image?: string;
+  title: string;
+  content: string;
+  type: PostType;
+  created_at: string;
+  image_url?: string;
+  tags?: string[];
+  likes_count: number;
+}
+
+

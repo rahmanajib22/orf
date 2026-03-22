@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Profile } from '../types';
+import { Profile, CommunityPost } from '../types';
 
 // Replace these with your actual Supabase project URL and anon key
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://grpywlkwyqfhxatgyhmp.supabase.co';
@@ -43,3 +43,56 @@ export async function getProfileById(id: string): Promise<Profile | null> {
       return mockProfiles.find(p => p.id === id) || null;
     }
   }
+
+export async function getCommunityPosts(): Promise<CommunityPost[]> {
+  try {
+    const { data, error } = await supabase
+      .from('community_posts')
+      .select('*, profiles(name, profile_picture)')
+      .order('created_at', { ascending: false });
+      
+    if (error) throw error;
+    
+    // Format the data to match our interface
+    return data.map(post => ({
+      ...post,
+      author_name: post.profiles?.name || 'مدرس مجهول',
+      author_image: post.profiles?.profile_picture || 'https://i.pravatar.cc/150'
+    }));
+  } catch (err) {
+    // Return mock data for local testing
+    return [
+      {
+        id: '1',
+        title: 'روود ماب الفيزياء للثانوية',
+        content: 'دي خارطة طريق كاملة عشان تقفل الفيزياء في 3 شهور بس..',
+        type: 'roadmap',
+        author_name: 'أ. أحمد علي',
+        created_at: new Date().toISOString(),
+        tags: ['فيزياء', 'ثانوية عامة'],
+        likes_count: 12
+      },
+      {
+         id: '2',
+         title: 'ورشة عمل: أساسيات البرمجة',
+         content: 'أكاديمية المستقبل بتعلن عن ورشة يوم الجمعة الجاية...',
+         type: 'announcement',
+         author_name: 'أكاديمية المستقبل',
+         created_at: new Date().toISOString(),
+         tags: ['برمجة', 'كورس'],
+         likes_count: 5
+      }
+    ];
+  }
+}
+
+export async function likePost(postId: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .rpc('increment_likes', { post_id: postId });
+      
+    if (error) throw error;
+  } catch (err) {
+    console.error("Failed to like post", err);
+  }
+}

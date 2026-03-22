@@ -26,8 +26,8 @@ export const Header: React.FC = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center justify-center gap-8 font-cairo w-1/3">
             <Link to="/" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors">الرئيسية</Link>
+            <Link to="/community" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors underline decoration-4 decoration-[#C0272D]">الساحة</Link>
             <a href="#" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors">المدرسين</a>
-            <a href="#" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors">المواد</a>
           </nav>
 
           {/* Action Button */}
@@ -54,8 +54,8 @@ export const Header: React.FC = () => {
         <div className="md:hidden bg-[#1A1A1A] border-b-4 border-[#C0272D]">
           <div className="px-6 pt-4 pb-6 space-y-4 font-cairo font-bold">
             <Link to="/" className="block text-[#F0EDE8] hover:text-[#C0272D] py-2 border-b border-gray-800">الرئيسية</Link>
+            <Link to="/community" className="block text-[#C0272D] hover:bg-gray-800 py-2 border-b border-gray-800">ساحة الطلاب</Link>
             <a href="#" className="block text-[#F0EDE8] hover:text-[#C0272D] py-2 border-b border-gray-800">المدرسين</a>
-            <a href="#" className="block text-[#F0EDE8] hover:text-[#C0272D] py-2 border-b border-gray-800">المواد</a>
             <button className="w-full bg-[#C0272D] text-[#F0EDE8] px-4 py-3 font-black mt-4 flex justify-center items-center gap-2">
                انضم كمعلم <Rocket className="w-5 h-5 ml-1" />
             </button>
