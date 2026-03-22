@@ -234,8 +234,10 @@ export const Home: React.FC = () => {
           setSelectedGender={setSelectedGender}
           onSearch={handleSearch}
           onQuickChip={handleQuickChip}
-          dynamicCities={[...new Set(profiles.map(p => p.city))]}
-          dynamicSpecs={[...new Set(profiles.map(p => p.specialization))]}
+          dynamicCities={[...new Set(profiles.map(p => p.city).filter(Boolean))] as string[]}
+          dynamicSpecs={[...new Set(profiles.map(p => p.specialization).filter(Boolean))] as string[]}
+          dynamicAudiences={[...new Set(profiles.flatMap(p => p.target_audience).filter(Boolean))] as string[]}
+          dynamicLocations={[...new Set(profiles.map(p => p.location_preference).filter(Boolean))] as string[]}
         />
 
         {loading ? (

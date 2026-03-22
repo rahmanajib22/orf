@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MessageSquare, Calendar, Compass, FileText, ChevronLeft, User, Search, Filter, Heart } from 'lucide-react';
+import { MessageSquare, Calendar, Compass, FileText, ChevronLeft, User, Search, Heart } from 'lucide-react';
 import { getCommunityPosts, likePost } from '../lib/supabase';
 import { CommunityPost, PostType } from '../types';
 
@@ -51,6 +51,8 @@ export const Community: React.FC = () => {
     return matchesTab && matchesSearch;
   });
 
+  const availableTypes = [...new Set(posts.map(p => p.type))];
+
   const getTypeStyle = (type: PostType) => {
     switch (type) {
       case 'article': return { color: '#1A1A1A', icon: <FileText className="w-4 h-4" />, label: 'شرح تعليمي' };
@@ -94,17 +96,27 @@ export const Community: React.FC = () => {
 
             {/* Tabs */}
             <div className="flex bg-white border-4 border-[#1A1A1A] p-2 gap-2 overflow-x-auto w-full md:w-auto scrollbar-hide">
-                {(['all', 'article', 'announcement', 'roadmap'] as const).map((tab) => (
+                <button
+                    onClick={() => setActiveTab('all')}
+                    className={`px-6 py-2 font-black transition-all whitespace-nowrap ${
+                        activeTab === 'all' 
+                        ? 'bg-[#C0272D] text-white shadow-[4px_4px_0_#1A1A1A]' 
+                        : 'hover:bg-gray-100 text-[#1A1A1A]'
+                    }`}
+                >
+                    الكل
+                </button>
+                {availableTypes.filter(Boolean).map((type) => (
                     <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
+                        key={type}
+                        onClick={() => setActiveTab(type as any)}
                         className={`px-6 py-2 font-black transition-all whitespace-nowrap ${
-                            activeTab === tab 
+                            activeTab === type 
                             ? 'bg-[#C0272D] text-white shadow-[4px_4px_0_#1A1A1A]' 
                             : 'hover:bg-gray-100 text-[#1A1A1A]'
                         }`}
                     >
-                        {tab === 'all' ? 'الكل' : tab === 'article' ? 'شروحات' : tab === 'announcement' ? 'ورش عمل' : 'روود ماب'}
+                        {type === 'article' ? 'شروحات' : type === 'announcement' ? 'ورش عمل' : type === 'roadmap' ? 'روود ماب' : type}
                     </button>
                 ))}
             </div>

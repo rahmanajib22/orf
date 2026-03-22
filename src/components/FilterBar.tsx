@@ -21,6 +21,8 @@ interface FilterProps {
   onQuickChip: (filterType: string, value: string) => void;
   dynamicCities?: string[];
   dynamicSpecs?: string[];
+  dynamicAudiences?: string[];
+  dynamicLocations?: string[];
 }
 
 export const FilterBar: React.FC<FilterProps> = ({
@@ -32,7 +34,8 @@ export const FilterBar: React.FC<FilterProps> = ({
   selectedCity, setSelectedCity,
   selectedGender, setSelectedGender,
   onSearch, onQuickChip,
-  dynamicCities = [], dynamicSpecs = []
+  dynamicCities = [], dynamicSpecs = [],
+  dynamicAudiences = [], dynamicLocations = []
 }) => {
   const [selectedSmartSentence, setSelectedSmartSentence] = useState("");
 
@@ -180,17 +183,22 @@ export const FilterBar: React.FC<FilterProps> = ({
 
                 {/* Target Audience */}
                 <div className="relative flex-none w-44 md:flex-1 md:w-48 group">
-                    <select 
-                        className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
-                        value={selectedAudience}
-                        onChange={(e) => setSelectedAudience(e.target.value)}
-                    >
-                        <option value="">المرحلة العمرية</option>
-                        <option value="ابتدائي">ابتدائي</option>
-                        <option value="إعدادي">إعدادي</option>
-                        <option value="ثانوي">ثانوي</option>
-                        <option value="عام">عام</option>
-                    </select>
+                     <select 
+                         className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
+                         value={selectedAudience}
+                         onChange={(e) => setSelectedAudience(e.target.value)}
+                     >
+                         <option value="">كل المراحل</option>
+                         {dynamicAudiences.length > 0 ? (
+                            dynamicAudiences.map(aud => <option key={aud} value={aud}>{aud}</option>)
+                         ) : (
+                            <>
+                              <option value="ابتدائي">ابتدائي</option>
+                              <option value="إعدادي">إعدادي</option>
+                              <option value="ثانوي">ثانوي</option>
+                            </>
+                         )}
+                     </select>
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <Users className="h-4 w-4 text-[#1A1A1A]" />
                     </div>
@@ -214,16 +222,22 @@ export const FilterBar: React.FC<FilterProps> = ({
 
                 {/* Location Pref */}
                 <div className="relative flex-none w-44 md:flex-1 md:w-48 group">
-                <select 
-                    className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
-                    value={selectedLocation}
-                    onChange={(e) => setSelectedLocation(e.target.value)}
-                >
-                    <option value="">مكان الحصة</option>
-                    <option value="بيجي البيت">بيجي البيت</option>
-                    <option value="في سنتر">في سنتر</option>
-                    <option value="أونلاين">أونلاين</option>
-                </select>
+                 <select 
+                     className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
+                     value={selectedLocation}
+                     onChange={(e) => setSelectedLocation(e.target.value)}
+                 >
+                     <option value="">مكان الحصة</option>
+                     {dynamicLocations.length > 0 ? (
+                        dynamicLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)
+                     ) : (
+                        <>
+                          <option value="بيجي البيت">بيجي البيت</option>
+                          <option value="في سنتر">في سنتر</option>
+                          <option value="أونلاين">أونلاين</option>
+                        </>
+                     )}
+                 </select>
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <Home className="h-4 w-4 text-[#1A1A1A]" />
                 </div>
