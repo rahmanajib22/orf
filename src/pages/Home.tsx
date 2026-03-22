@@ -234,6 +234,8 @@ export const Home: React.FC = () => {
           setSelectedGender={setSelectedGender}
           onSearch={handleSearch}
           onQuickChip={handleQuickChip}
+          dynamicCities={[...new Set(profiles.map(p => p.city))]}
+          dynamicSpecs={[...new Set(profiles.map(p => p.specialization))]}
         />
 
         {loading ? (

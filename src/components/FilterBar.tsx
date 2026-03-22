@@ -19,6 +19,8 @@ interface FilterProps {
   setSelectedGender: (val: string) => void;
   onSearch: () => void;
   onQuickChip: (filterType: string, value: string) => void;
+  dynamicCities?: string[];
+  dynamicSpecs?: string[];
 }
 
 export const FilterBar: React.FC<FilterProps> = ({
@@ -29,7 +31,8 @@ export const FilterBar: React.FC<FilterProps> = ({
   selectedRating, setSelectedRating,
   selectedCity, setSelectedCity,
   selectedGender, setSelectedGender,
-  onSearch, onQuickChip
+  onSearch, onQuickChip,
+  dynamicCities = [], dynamicSpecs = []
 }) => {
   const [selectedSmartSentence, setSelectedSmartSentence] = useState("");
 
@@ -131,16 +134,22 @@ export const FilterBar: React.FC<FilterProps> = ({
             <div className="flex w-full md:w-auto gap-4 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                 {/* Spec */}
                 <div className="relative flex-none w-40 md:flex-1 md:w-48 group">
-                <select 
-                    className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
-                    value={selectedSpec}
-                    onChange={(e) => setSelectedSpec(e.target.value)}
-                >
-                    <option value="">كل التخصصات</option>
-                    <option value="مدرس">مدرس أكاديمي</option>
-                    <option value="مدرب">مدرب مهارات</option>
-                    <option value="محفظ">محفظ قرآن</option>
-                </select>
+                 <select 
+                     className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
+                     value={selectedSpec}
+                     onChange={(e) => setSelectedSpec(e.target.value)}
+                 >
+                     <option value="">كل التخصصات</option>
+                     {dynamicSpecs.length > 0 ? (
+                        dynamicSpecs.map(spec => <option key={spec} value={spec}>{spec}</option>)
+                     ) : (
+                        <>
+                          <option value="مدرس">مدرس أكاديمي</option>
+                          <option value="مدرب">مدرب مهارات</option>
+                          <option value="محفظ">محفظ قرآن</option>
+                        </>
+                     )}
+                 </select>
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                     <BookOpen className="h-4 w-4 text-[#1A1A1A]" />
                 </div>
@@ -148,16 +157,22 @@ export const FilterBar: React.FC<FilterProps> = ({
 
                 {/* City */}
                 <div className="relative flex-none w-36 md:flex-1 md:w-40 group">
-                    <select 
-                        className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
-                        value={selectedCity}
-                        onChange={(e) => setSelectedCity(e.target.value)}
-                    >
-                        <option value="">كل المدن</option>
-                        <option value="شنوان">شنوان</option>
-                        <option value="شبين الكوم">شبين الكوم</option>
-                        <option value="الباجور">الباجور</option>
-                    </select>
+                     <select 
+                         className="block w-full pr-10 pl-4 py-3 bg-gray-50 border-2 border-[#1A1A1A] text-[#1A1A1A] font-bold outline-none focus:border-[#C0272D] focus:bg-white appearance-none cursor-pointer rounded-none hover:border-gray-500"
+                         value={selectedCity}
+                         onChange={(e) => setSelectedCity(e.target.value)}
+                     >
+                         <option value="">كل المدن</option>
+                         {dynamicCities.length > 0 ? (
+                            dynamicCities.map(city => <option key={city} value={city}>{city}</option>)
+                         ) : (
+                            <>
+                              <option value="شنوان">شنوان</option>
+                              <option value="شبين الكوم">شبين الكوم</option>
+                              <option value="الباجور">الباجور</option>
+                            </>
+                         )}
+                     </select>
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <MapPin className="h-4 w-4 text-[#1A1A1A]" />
                     </div>
