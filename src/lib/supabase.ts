@@ -116,3 +116,16 @@ export async function getPostById(id: string): Promise<CommunityPost | null> {
      return null;
   }
 }
+
+export async function subscribeToNewPosts(email: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('community_subscribers')
+      .insert([{ email }]);
+      
+    if (error && error.code !== '23505') throw error; // Ignore if already exists (unique constraint)
+  } catch (err) {
+    console.error("Failed to subscribe", err);
+    throw err;
+  }
+}
