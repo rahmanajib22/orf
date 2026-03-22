@@ -170,3 +170,19 @@ export async function getTopViewedTeachers(limit: number = 2): Promise<Profile[]
     return [];
   }
 }
+
+export interface HonorChampion extends Profile {
+  champion_type: 'visits' | 'posts';
+  post_count: number;
+}
+
+export async function getHonorsChampions(): Promise<HonorChampion[]> {
+  try {
+    const { data, error } = await supabase.rpc('get_honors_champions');
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error("Failed to fetch honors champions", err);
+    return [];
+  }
+}
