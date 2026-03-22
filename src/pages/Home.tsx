@@ -92,6 +92,15 @@ export const Home: React.FC = () => {
     }
   };
 
+  const isSearching = appliedFilters.search !== '' || 
+                    appliedFilters.spec !== '' || 
+                    appliedFilters.location !== '' || 
+                    appliedFilters.audience !== '' || 
+                    appliedFilters.rating !== '' || 
+                    appliedFilters.city !== '' || 
+                    appliedFilters.teaching_style !== '' || 
+                    appliedFilters.gender !== '';
+
   const filteredProfiles = profiles.filter(p => {
     const normalizedSearch = normalizeArabic(appliedFilters.search);
     const matchesSearch = normalizeArabic(p.name).includes(normalizedSearch) || 
@@ -107,6 +116,16 @@ export const Home: React.FC = () => {
     
     return matchesSearch && matchesSpec && matchesLocation && matchesAudience && matchesRating && matchesCity && matchesTeaching && matchesGender;
   });
+
+  // Calculate Featured Profiles: Those with is_featured=true OR the top 8 by rating
+  const baseFeatured = profiles.filter(p => p.is_featured).length > 0 
+    ? profiles.filter(p => p.is_featured) 
+    : profiles.slice(0, 8);
+
+  // If searching, only show featured profiles that also match the search filters
+  const displayFeatured = isSearching 
+    ? baseFeatured.filter(p => filteredProfiles.some(fp => fp.id === p.id))
+    : baseFeatured;
 
   return (
     <div className="min-h-[100vh] bg-[#F0EDE8] py-16 px-4 sm:px-8 relative font-cairo z-0 overflow-x-hidden">
@@ -188,11 +207,11 @@ export const Home: React.FC = () => {
         />
 
         {/* FEATURED SLIDER SECTION */}
-        {!loading && profiles.length > 0 && (
+        {!loading && profiles.length > 0 && displayFeatured.length > 0 && (
           <div className="mb-20 relative bg-white border-4 border-[#1A1A1A] p-8 shadow-[12px_12px_0_#1A1A1A]">
             <div className="flex flex-row-reverse justify-between items-center mb-8">
                <h3 className="text-2xl font-black text-[#1A1A1A] flex items-center gap-3">
-                  <span className="w-4 h-4 bg-[#C0272D] animate-pulse"></span> مدرسين متميزين // FEATURED
+                  <span className="w-4 h-4 bg-[#C0272D] animate-pulse"></span> {isSearching ? "متميزون يطابقون بحثك" : "مدرسين متميزون"} // FEATURED
                </h3>
                
                {/* SLIDER ARROWS */}
@@ -223,9 +242,9 @@ export const Home: React.FC = () => {
               className="flex gap-8 overflow-x-auto scrollbar-hide pb-10 scroll-smooth snap-x" 
               dir="rtl"
             >
-              {profiles.slice(0, 8).map((p, idx) => (
+              {displayFeatured.map((p, idx) => (
                 <motion.div 
-                  key={idx} 
+                  key={p.id} 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ 
                     opacity: 1, 
@@ -245,6 +264,7 @@ export const Home: React.FC = () => {
             </div>
           </div>
         )}
+
 
 
         {loading ? (

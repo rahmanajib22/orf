@@ -45,6 +45,8 @@ const generateMockData = (): Profile[] => {
       gender: i % 2 === 0 ? 'ذكر' : 'أنثى',
       teaching_style: ['تأسيس', 'مراجعات', 'حل عقدة'][i % 3],
       location_preference: ['بيجي البيت', 'في سنتر', 'أونلاين'][i % 3],
+      is_featured: i % 5 === 0,
+      views_count: Math.floor(Math.random() * 1000),
       tags: ['باله طويل', 'ابن المنطقة', 'شديد وناجح'].slice(0, (i % 3) + 1)
     });
   }

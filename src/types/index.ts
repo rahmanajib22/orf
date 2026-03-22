@@ -23,9 +23,10 @@ export interface Profile {
   city: string;
   teaching_style?: string;
   location_preference?: string;
-  tags?: string[];
   gender?: string;
   views_count?: number;
+  is_featured?: boolean;
+  tags?: string[];
 }
 
 export type PostType = 'article' | 'announcement' | 'roadmap';
