@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, MapPin, Clock, BookOpen, Facebook, BadgeCheck, FileText, Target, Award } from 'lucide-react';
-import { getProfileById } from '../lib/supabase';
+import { ArrowRight, Star, MapPin, Clock, BookOpen, Facebook, BadgeCheck, FileText, Target, Award, Eye } from 'lucide-react';
+import { getProfileById, incrementProfileViews } from '../lib/supabase';
 import { Profile } from '../types';
 import { getProfileStyle } from '../lib/styleUtils';
 
@@ -17,6 +17,8 @@ export const ProfileDetail: React.FC = () => {
       try {
         const data = await getProfileById(id);
         setProfile(data);
+        // Track the view
+        incrementProfileViews(id);
       } catch (err) {
         console.error("Failed to load profile", err);
       } finally {

@@ -146,3 +146,27 @@ export async function getFeaturedTeacher(): Promise<Profile | null> {
     return null;
   }
 }
+
+export async function incrementProfileViews(profileId: string): Promise<void> {
+  try {
+    await supabase.rpc('increment_profile_views', { profile_id: profileId });
+  } catch (err) {
+    console.error("Failed to increment views", err);
+  }
+}
+
+export async function getTopViewedTeachers(limit: number = 2): Promise<Profile[]> {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('views_count', { ascending: false })
+      .limit(limit);
+      
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error("Failed to fetch top viewed teachers", err);
+    return [];
+  }
+}

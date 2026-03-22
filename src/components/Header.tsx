@@ -42,10 +42,10 @@ export const Header: React.FC = () => {
 
           {/* Featured Teacher Billboard (Top Bar) - REAL DATA LINKED */}
           {featured && (
-            <Link to={`/profile/${featured.id}`} className="hidden lg:flex items-center gap-4 bg-[#F0EDE8] border-r-8 border-l-4 border-y-2 border-[#1A1A1A] px-4 py-2 shadow-[4px_4px_0_#C0272D] animate-pulse hover:shadow-none transition-all group">
+            <Link to="/honors" className="hidden lg:flex items-center gap-4 bg-[#F0EDE8] border-r-8 border-l-4 border-y-2 border-[#1A1A1A] px-4 py-2 shadow-[4px_4px_0_#C0272D] animate-pulse hover:shadow-none transition-all group">
               <div className="flex flex-col text-right">
-                <span className="text-[10px] font-black text-[#C0272D] uppercase tracking-tighter leading-none mb-1">// متميز هذا الشهر</span>
-                <span className="text-sm font-black text-[#1A1A1A] leading-none group-hover:text-[#C0272D]">{featured.name} ({featured.subject})</span>
+                <span className="text-[10px] font-black text-[#C0272D] uppercase tracking-tighter leading-none mb-1">🥇 ملوك الساحة هذا الأسبوع</span>
+                <span className="text-sm font-black text-[#1A1A1A] leading-none group-hover:text-[#C0272D]">{featured.name} ومدرسين آخرين...</span>
               </div>
               <div className="w-10 h-10 border-2 border-[#1A1A1A] bg-gray-200 overflow-hidden shrink-0">
                  {featured.profile_picture ? (

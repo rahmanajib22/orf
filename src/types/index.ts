@@ -25,6 +25,7 @@ export interface Profile {
   location_preference?: string;
   tags?: string[];
   gender?: string;
+  views_count?: number;
 }
 
 export type PostType = 'article' | 'announcement' | 'roadmap';
