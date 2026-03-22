@@ -102,6 +102,55 @@ export const Community: React.FC = () => {
             </p>
         </header>
 
+        {/* NEWSLETTER SECTION (MOVED TO TOP) */}
+        <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12 bg-[#C0272D] border-4 border-[#1A1A1A] p-8 md:p-12 shadow-[12px_12px_0_#1A1A1A] relative overflow-hidden"
+        >
+            {/* Background Icon */}
+            <Bell className="absolute -right-8 -bottom-8 w-64 h-64 text-white opacity-10 rotate-12" />
+            
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-white">
+                <div className="max-w-xl text-center md:text-right">
+                    <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter">خليك أول واحد يعرف!</h2>
+                    <p className="text-xl font-bold opacity-90 leading-relaxed font-cairo text-white">
+                        اشترك في بريد الساحة وعشان يوصلك إشعار فوري بمجرد ما أي مدرس ينزل شرح جديد.
+                    </p>
+                </div>
+
+                <div className="w-full md:w-auto">
+                    {subscribed ? (
+                        <motion.div 
+                            initial={{ scale: 0.8 }} 
+                            animate={{ scale: 1 }}
+                            className="bg-white text-[#C0272D] p-6 border-4 border-[#1A1A1A] font-black text-2xl flex items-center gap-3 shadow-[8px_8px_0_#1A1A1A]"
+                        >
+                            <Send className="w-8 h-8" /> تم الاشتراك بنجاح!
+                        </motion.div>
+                    ) : (
+                        <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
+                            <input 
+                                type="email" 
+                                required
+                                placeholder="اكتب إيميلك هنا..."
+                                className="bg-white border-4 border-[#1A1A1A] p-4 text-[#1A1A1A] font-bold text-lg min-w-[300px] outline-none"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                            <button 
+                                type="submit"
+                                disabled={subscribing}
+                                className="bg-[#1A1A1A] hover:bg-gray-800 text-white px-8 py-4 font-black text-xl border-4 border-[#1A1A1A] shadow-[8px_8px_0_#F0EDE8]"
+                            >
+                                {subscribing ? 'جاري...' : 'اشترك دلوقتي'}
+                            </button>
+                        </form>
+                    )}
+                </div>
+            </div>
+        </motion.div>
+
         {/* CONTROLS */}
         <div className="flex flex-col md:flex-row gap-6 mb-12 items-center">
             {/* Search */}
@@ -230,54 +279,6 @@ export const Community: React.FC = () => {
             </div>
         )}
 
-        {/* NEWSLETTER SECTION */}
-        <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-32 bg-[#C0272D] border-4 border-[#1A1A1A] p-8 md:p-12 shadow-[12px_12px_0_#1A1A1A] relative overflow-hidden"
-        >
-            {/* Background Icon */}
-            <Bell className="absolute -right-8 -bottom-8 w-64 h-64 text-white opacity-10 rotate-12" />
-            
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-white">
-                <div className="max-w-xl text-center md:text-right">
-                    <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter">خليك أول واحد يعرف!</h2>
-                    <p className="text-xl font-bold opacity-90 leading-relaxed font-cairo">
-                        اشترك في بريد الساحة وعشان يوصلك إشعار فوري بمجرد ما أي مدرس ينزل شرح جديد أو خارطة طريق.
-                    </p>
-                </div>
-
-                <div className="w-full md:w-auto">
-                    {subscribed ? (
-                        <motion.div 
-                            initial={{ scale: 0.8 }} 
-                            animate={{ scale: 1 }}
-                            className="bg-white text-[#C0272D] p-6 border-4 border-[#1A1A1A] font-black text-2xl flex items-center gap-3 shadow-[8px_8px_0_#1A1A1A]"
-                        >
-                            <Send className="w-8 h-8" /> استعد للجديد.. تم الاشتراك!
-                        </motion.div>
-                    ) : (
-                        <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
-                            <input 
-                                type="email" 
-                                required
-                                placeholder="اكتب إيميلك هنا..."
-                                className="bg-white border-4 border-[#1A1A1A] p-4 text-[#1A1A1A] font-bold text-lg min-w-[300px] outline-none focus:bg-[#F0EDE8] transition-colors"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <button 
-                                type="submit"
-                                disabled={subscribing}
-                                className="bg-[#1A1A1A] hover:bg-gray-800 text-white px-8 py-4 font-black text-xl flex items-center justify-center gap-2 transition-all border-4 border-[#1A1A1A] shadow-[8px_8px_0_#F0EDE8] hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
-                            >
-                                {subscribing ? 'جاري الاشتراك...' : 'اشترك دلوقتي'}
-                            </button>
-                        </form>
-                    )}
-                </div>
-            </div>
-        </motion.div>
 
       </div>
     </div>

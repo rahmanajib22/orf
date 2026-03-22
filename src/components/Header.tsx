@@ -27,8 +27,18 @@ export const Header: React.FC = () => {
             >
               الساحة
             </Link>
-            <a href="#" className="font-bold text-[#1A1A1A] hover:text-[#C0272D] transition-colors">المدرسين</a>
           </nav>
+
+          {/* Featured Teacher Billboard (Top Bar) */}
+          <div className="hidden lg:flex items-center gap-4 bg-[#F0EDE8] border-r-8 border-l-4 border-y-2 border-[#1A1A1A] px-4 py-2 shadow-[4px_4px_0_#C0272D] animate-pulse">
+            <div className="flex flex-col text-right">
+              <span className="text-[10px] font-black text-[#C0272D] uppercase tracking-tighter leading-none mb-1">// مدرس الأسبوع المتميز</span>
+              <span className="text-sm font-black text-[#1A1A1A] leading-none">أ. محمود علي (فيزياء)</span>
+            </div>
+            <div className="w-10 h-10 border-2 border-[#1A1A1A] bg-gray-200 overflow-hidden shrink-0">
+               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Featured" className="w-full h-full object-cover" />
+            </div>
+          </div>
 
           {/* Action Button */}
           <div className="hidden md:flex justify-end w-1/3">

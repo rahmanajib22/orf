@@ -163,6 +163,30 @@ export const Home: React.FC = () => {
             </div>
         </header>
 
+        {/* SMART FILTER SECTION (MOVED TO TOP) */}
+        <FilterBar 
+          searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm}
+          selectedSpec={selectedSpec}
+          setSelectedSpec={setSelectedSpec}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          selectedAudience={selectedAudience}
+          setSelectedAudience={setSelectedAudience}
+          selectedRating={selectedRating}
+          setSelectedRating={setSelectedRating}
+          selectedCity={selectedCity}
+          setSelectedCity={setSelectedCity}
+          selectedGender={selectedGender}
+          setSelectedGender={setSelectedGender}
+          onSearch={handleSearch}
+          onQuickChip={handleQuickChip}
+          dynamicCities={[...new Set(profiles.map(p => p.city).filter(Boolean))] as string[]}
+          dynamicSpecs={[...new Set(profiles.map(p => p.specialization).filter(Boolean))] as string[]}
+          dynamicAudiences={[...new Set(profiles.flatMap(p => p.target_audience).filter(Boolean))] as string[]}
+          dynamicLocations={[...new Set(profiles.map(p => p.location_preference).filter(Boolean))] as string[]}
+        />
+
         {/* FEATURED SLIDER SECTION */}
         {!loading && profiles.length > 0 && (
           <div className="mb-20 relative bg-white border-4 border-[#1A1A1A] p-8 shadow-[12px_12px_0_#1A1A1A]">
@@ -222,28 +246,6 @@ export const Home: React.FC = () => {
           </div>
         )}
 
-        <FilterBar 
-          searchTerm={searchTerm} 
-          setSearchTerm={setSearchTerm}
-          selectedSpec={selectedSpec}
-          setSelectedSpec={setSelectedSpec}
-          selectedLocation={selectedLocation}
-          setSelectedLocation={setSelectedLocation}
-          selectedAudience={selectedAudience}
-          setSelectedAudience={setSelectedAudience}
-          selectedRating={selectedRating}
-          setSelectedRating={setSelectedRating}
-          selectedCity={selectedCity}
-          setSelectedCity={setSelectedCity}
-          selectedGender={selectedGender}
-          setSelectedGender={setSelectedGender}
-          onSearch={handleSearch}
-          onQuickChip={handleQuickChip}
-          dynamicCities={[...new Set(profiles.map(p => p.city).filter(Boolean))] as string[]}
-          dynamicSpecs={[...new Set(profiles.map(p => p.specialization).filter(Boolean))] as string[]}
-          dynamicAudiences={[...new Set(profiles.flatMap(p => p.target_audience).filter(Boolean))] as string[]}
-          dynamicLocations={[...new Set(profiles.map(p => p.location_preference).filter(Boolean))] as string[]}
-        />
 
         {loading ? (
           <div className="flex justify-center flex-col items-center py-32">
