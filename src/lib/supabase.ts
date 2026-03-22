@@ -129,3 +129,20 @@ export async function subscribeToNewPosts(email: string): Promise<void> {
     throw err;
   }
 }
+
+export async function getFeaturedTeacher(): Promise<Profile | null> {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('rating', { ascending: false })
+      .limit(1)
+      .single();
+      
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error("Failed to fetch featured teacher", err);
+    return null;
+  }
+}

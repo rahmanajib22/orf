@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Target, Menu, X, Rocket } from 'lucide-react';
+import { Menu, X, Rocket, User } from 'lucide-react';
+import { getFeaturedTeacher } from '../lib/supabase';
+import { Profile } from '../types';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [featured, setFeatured] = useState<Profile | null>(null);
   const location = useLocation();
+
+  useEffect(() => {
+    async function loadFeatured() {
+      const data = await getFeaturedTeacher();
+      setFeatured(data);
+    }
+    loadFeatured();
+  }, []);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -29,16 +40,22 @@ export const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Featured Teacher Billboard (Top Bar) */}
-          <div className="hidden lg:flex items-center gap-4 bg-[#F0EDE8] border-r-8 border-l-4 border-y-2 border-[#1A1A1A] px-4 py-2 shadow-[4px_4px_0_#C0272D] animate-pulse">
-            <div className="flex flex-col text-right">
-              <span className="text-[10px] font-black text-[#C0272D] uppercase tracking-tighter leading-none mb-1">// مدرس الأسبوع المتميز</span>
-              <span className="text-sm font-black text-[#1A1A1A] leading-none">أ. محمود علي (فيزياء)</span>
-            </div>
-            <div className="w-10 h-10 border-2 border-[#1A1A1A] bg-gray-200 overflow-hidden shrink-0">
-               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Featured" className="w-full h-full object-cover" />
-            </div>
-          </div>
+          {/* Featured Teacher Billboard (Top Bar) - REAL DATA LINKED */}
+          {featured && (
+            <Link to={`/profile/${featured.id}`} className="hidden lg:flex items-center gap-4 bg-[#F0EDE8] border-r-8 border-l-4 border-y-2 border-[#1A1A1A] px-4 py-2 shadow-[4px_4px_0_#C0272D] animate-pulse hover:shadow-none transition-all group">
+              <div className="flex flex-col text-right">
+                <span className="text-[10px] font-black text-[#C0272D] uppercase tracking-tighter leading-none mb-1">// متميز هذا الشهر</span>
+                <span className="text-sm font-black text-[#1A1A1A] leading-none group-hover:text-[#C0272D]">{featured.name} ({featured.subject})</span>
+              </div>
+              <div className="w-10 h-10 border-2 border-[#1A1A1A] bg-gray-200 overflow-hidden shrink-0">
+                 {featured.profile_picture ? (
+                   <img src={featured.profile_picture} alt={featured.name} className="w-full h-full object-cover" />
+                 ) : (
+                   <User className="w-full h-full p-2 text-gray-400" />
+                 )}
+              </div>
+            </Link>
+          )}
 
           {/* Action Button */}
           <div className="hidden md:flex justify-end w-1/3">
