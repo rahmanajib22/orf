@@ -186,3 +186,27 @@ export async function getHonorsChampions(): Promise<HonorChampion[]> {
     return [];
   }
 }
+
+export async function getPlatformConfig(): Promise<Record<string, string>> {
+  try {
+    const { data, error } = await supabase
+      .from('platform_config')
+      .select('key, value');
+      
+    if (error) throw error;
+    
+    // Convert array of {key, value} to a single object
+    const config: Record<string, string> = {};
+    if (data) {
+      data.forEach(item => {
+        config[item.key] = item.value;
+      });
+    }
+    return config;
+  } catch (err) {
+    return {
+      site_title: 'إيدو فيليج // Edu Village',
+      is_under_maintenance: 'false'
+    };
+  }
+}
