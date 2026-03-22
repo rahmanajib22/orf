@@ -50,6 +50,30 @@ const generateMockData = (): Profile[] => {
       tags: ['باله طويل', 'ابن المنطقة', 'شديد وناجح'].slice(0, (i % 3) + 1)
     });
   }
+  
+  // Test case: Adding Malak Emad from a new city "قويسنا"
+  profiles.push({
+    id: 'mock-malak-emad',
+    name: 'ملك عماد',
+    specialization: 'مدرس',
+    subject: 'الكيمياء',
+    target_audience: ['ثانوي'],
+    session_type: 'أوفلاين',
+    bio: 'أنا ملك عماد، أستاذة الكيمياء للثانوية العامة في قويسنا وبنها.',
+    years_of_experience: 3,
+    rating: 4.9,
+    whatsapp_link: 'https://wa.me/201234567890',
+    profile_picture: 'https://i.pravatar.cc/300?img=48',
+    city: 'قويسنا',
+    gender: 'أنثى',
+    teaching_style: 'حل عقدة',
+    location_preference: 'في سنتر',
+    is_featured: false,
+    skills: ['كيمياء عضوية', 'تبسيط المناهج'],
+    achievements: ['أفضل معلمة شابة 2025'],
+    tags: ['ابن المنطقة', 'بيشرح بضمير']
+  });
+  
   return profiles;
 };
 
