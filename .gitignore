@@ -1,0 +1,16 @@
+# Use this file to stop GitHub from taking the "Heavy Luggage" or "Secret Keys"
+# This will fix the Vercel error!
+
+node_modules
+.env
+dist
+.DS_Store
+*.local
+.npm
+.vscode
+.idea
+.gemini
+package-lock.json
+# Actually, keep package-lock.json for stability if it's there. 
+# But if it's already on Github and broken, Vercel might struggle.
+# Usually we KEEP package-lock.json but IGNORE node_modules and .env
