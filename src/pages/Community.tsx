@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { MessageSquare, Calendar, Compass, FileText, ChevronLeft, User, Search, Heart } from 'lucide-react';
 import { getCommunityPosts, likePost } from '../lib/supabase';
 import { CommunityPost, PostType } from '../types';
+import { normalizeArabic } from '../utils/arabic';
 
 export const Community: React.FC = () => {
   const [posts, setPosts] = useState<CommunityPost[]>([]);
@@ -45,9 +46,10 @@ export const Community: React.FC = () => {
   };
 
   const filteredPosts = posts.filter(post => {
+    const normalizedQuery = normalizeArabic(searchQuery);
     const matchesTab = activeTab === 'all' || post.type === activeTab;
-    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          post.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = normalizeArabic(post.title).includes(normalizedQuery) || 
+                         normalizeArabic(post.content).includes(normalizedQuery);
     return matchesTab && matchesSearch;
   });
 

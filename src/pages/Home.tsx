@@ -6,6 +6,8 @@ import { Profile } from '../types';
 import { ProfileCard } from '../components/ProfileCard';
 import { FilterBar } from '../components/FilterBar';
 
+import { normalizeArabic } from '../utils/arabic';
+
 export const Home: React.FC = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -91,7 +93,10 @@ export const Home: React.FC = () => {
   };
 
   const filteredProfiles = profiles.filter(p => {
-    const matchesSearch = p.name.includes(appliedFilters.search) || p.subject.includes(appliedFilters.search);
+    const normalizedSearch = normalizeArabic(appliedFilters.search);
+    const matchesSearch = normalizeArabic(p.name).includes(normalizedSearch) || 
+                         normalizeArabic(p.subject).includes(normalizedSearch);
+    
     const matchesSpec = appliedFilters.spec ? p.specialization === appliedFilters.spec : true;
     const matchesLocation = appliedFilters.location ? p.location_preference === appliedFilters.location : true;
     const matchesAudience = appliedFilters.audience ? p.target_audience.includes(appliedFilters.audience as any) : true;
