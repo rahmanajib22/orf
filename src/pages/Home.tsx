@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getProfiles } from '../lib/supabase';
 import { Profile } from '../types';
 import { ProfileCard } from '../components/ProfileCard';
@@ -157,24 +158,61 @@ export const Home: React.FC = () => {
             </div>
         </header>
 
-        {/* FEATURED CAROUSEL SECTION */}
+        {/* FEATURED SLIDER SECTION */}
         {!loading && profiles.length > 0 && (
-          <div className="mb-20 overflow-hidden relative pb-10">
-            <h3 className="text-xl font-black text-[#1A1A1A] mb-8 flex items-center gap-3" dir="rtl">
-               <span className="w-2 h-2 bg-[#C0272D]"></span> مدرسين متميزين // FEATURED
-            </h3>
-            <div className="flex gap-6 animate-carousel-move hover:pause">
-              <motion.div 
-                className="flex gap-6"
-                animate={{ x: [0, -1200] }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-              >
-                {[...profiles.slice(0, 4), ...profiles.slice(0, 4)].map((p, idx) => (
-                  <div key={idx} className="w-72 flex-shrink-0">
-                    <ProfileCard profile={p} />
-                  </div>
-                ))}
-              </motion.div>
+          <div className="mb-20 relative bg-white border-4 border-[#1A1A1A] p-8 shadow-[12px_12px_0_#1A1A1A]">
+            <div className="flex flex-row-reverse justify-between items-center mb-8">
+               <h3 className="text-2xl font-black text-[#1A1A1A] flex items-center gap-3">
+                  <span className="w-4 h-4 bg-[#C0272D] animate-pulse"></span> مدرسين متميزين // FEATURED
+               </h3>
+               
+               {/* SLIDER ARROWS */}
+               <div className="flex gap-2">
+                  <button 
+                    onClick={() => {
+                        const container = document.getElementById('featured-slider');
+                        if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
+                    }}
+                    className="p-3 bg-[#1A1A1A] text-white hover:bg-[#C0272D] transition-colors border-2 border-white shadow-[2px_2px_0_#1A1A1A]"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                  <button 
+                    onClick={() => {
+                        const container = document.getElementById('featured-slider');
+                        if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
+                    }}
+                    className="p-3 bg-[#1A1A1A] text-white hover:bg-[#C0272D] transition-colors border-2 border-white shadow-[2px_2px_0_#1A1A1A]"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+               </div>
+            </div>
+
+            <div 
+              id="featured-slider"
+              className="flex gap-8 overflow-x-auto scrollbar-hide pb-10 scroll-smooth snap-x" 
+              dir="rtl"
+            >
+              {profiles.slice(0, 8).map((p, idx) => (
+                <motion.div 
+                  key={idx} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: [0, -12, 0],
+                    rotate: idx % 2 === 0 ? [-1, 1, -1] : [1, -1, 1] 
+                  }}
+                  transition={{ 
+                    opacity: { duration: 0.5 },
+                    y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 },
+                    rotate: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: idx * 0.2 }
+                  }}
+                  className="w-80 flex-shrink-0 snap-center"
+                >
+                  <ProfileCard profile={p} />
+                </motion.div>
+              ))}
             </div>
           </div>
         )}
