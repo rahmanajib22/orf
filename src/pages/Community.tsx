@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { MessageSquare, Calendar, Compass, FileText, ChevronLeft, User, Search, Heart, Bell, Send } from 'lucide-react';
-import { getCommunityPosts, likePost, subscribeToNewPosts } from '../lib/supabase';
+import { MessageSquare, Calendar, Compass, FileText, ChevronLeft, User, Search, Heart } from 'lucide-react';
+import { getCommunityPosts, likePost } from '../lib/supabase';
 import { CommunityPost, PostType } from '../types';
 import { normalizeArabic } from '../utils/arabic';
 
@@ -11,11 +11,6 @@ export const Community: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<PostType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Newsletter state
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-  const [subscribing, setSubscribing] = useState(false);
   
   // Track liked posts locally to prevent double clicking and show visual state
   const [likedPosts, setLikedPosts] = useState<string[]>(() => {
@@ -36,21 +31,6 @@ export const Community: React.FC = () => {
     }
     loadData();
   }, []);
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubscribing(true);
-    try {
-      await subscribeToNewPosts(email);
-      setSubscribed(true);
-      setEmail('');
-    } catch (err) {
-      alert("حدث خطأ أثناء الاشتراك.");
-    } finally {
-      setSubscribing(false);
-    }
-  };
 
   const handleLike = async (postId: string) => {
     if (likedPosts.includes(postId)) return;
@@ -102,52 +82,42 @@ export const Community: React.FC = () => {
             </p>
         </header>
 
-        {/* NEWSLETTER SECTION (MOVED TO TOP) */}
+        {/* SOCIAL COMMUNITY SECTION (REPLACED NEWSLETTER) */}
         <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12 bg-[#C0272D] border-4 border-[#1A1A1A] p-8 md:p-12 shadow-[12px_12px_0_#1A1A1A] relative overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-12 bg-[#1A1A1A] border-4 border-[#C0272D] p-8 md:p-12 shadow-[12px_12px_0_#C0272D] relative overflow-hidden text-white"
         >
-            {/* Background Icon */}
-            <Bell className="absolute -right-8 -bottom-8 w-64 h-64 text-white opacity-10 rotate-12" />
-            
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-white">
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
                 <div className="max-w-xl text-center md:text-right">
-                    <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter">خليك أول واحد يعرف!</h2>
-                    <p className="text-xl font-bold opacity-90 leading-relaxed font-cairo text-white">
-                        اشترك في بريد الساحة وعشان يوصلك إشعار فوري بمجرد ما أي مدرس ينزل شرح جديد.
+                    <h2 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase font-oswald">// Join the hub</h2>
+                    <h3 className="text-3xl font-black mb-4">انضم لمجتمعنا الرسمي</h3>
+                    <p className="text-xl font-bold opacity-80 leading-relaxed font-cairo">
+                        خليك دايماً أول واحد يوصله الشروحات الجديدة وخرايط الطريق. انضم لآلاف الطلاب على قنواتنا الرسمية في مصر.
                     </p>
                 </div>
 
-                <div className="w-full md:w-auto">
-                    {subscribed ? (
-                        <motion.div 
-                            initial={{ scale: 0.8 }} 
-                            animate={{ scale: 1 }}
-                            className="bg-white text-[#C0272D] p-6 border-4 border-[#1A1A1A] font-black text-2xl flex items-center gap-3 shadow-[8px_8px_0_#1A1A1A]"
-                        >
-                            <Send className="w-8 h-8" /> تم الاشتراك بنجاح!
-                        </motion.div>
-                    ) : (
-                        <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
-                            <input 
-                                type="email" 
-                                required
-                                placeholder="اكتب إيميلك هنا..."
-                                className="bg-white border-4 border-[#1A1A1A] p-4 text-[#1A1A1A] font-bold text-lg min-w-[300px] outline-none"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <button 
-                                type="submit"
-                                disabled={subscribing}
-                                className="bg-[#1A1A1A] hover:bg-gray-800 text-white px-8 py-4 font-black text-xl border-4 border-[#1A1A1A] shadow-[8px_8px_0_#F0EDE8]"
-                            >
-                                {subscribing ? 'جاري...' : 'اشترك دلوقتي'}
-                            </button>
-                        </form>
-                    )}
+                <div className="flex flex-col sm:flex-row gap-6 w-full md:w-auto">
+                    <a 
+                      href="https://wa.me/201234567890" // ضع رابط جروب الواتساب هنا
+                      target="_blank"
+                      className="bg-[#25D366] text-white px-8 py-5 border-4 border-white font-black text-2xl flex items-center justify-center gap-4 hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[8px_8px_0_#1A1A1A] transition-all"
+                    >
+                        واتساب
+                    </a>
+                    <a 
+                      href="https://t.me/edu_village" // ضع رابط التليجرام هنا
+                      target="_blank"
+                      className="bg-[#0088cc] text-white px-8 py-5 border-4 border-white font-black text-2xl flex items-center justify-center gap-4 hover:translate-x-1 hover:translate-y-1 hover:shadow-none shadow-[8px_8px_0_#1A1A1A] transition-all"
+                    >
+                        تليجرام
+                    </a>
                 </div>
+            </div>
+            
+            {/* Background Decorative */}
+            <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none flex items-center justify-center">
+                <span className="text-[20vw] font-black uppercase tracking-widest">// EDU COMMUNITY</span>
             </div>
         </motion.div>
 

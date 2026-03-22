@@ -1,21 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Rocket, User } from 'lucide-react';
-import { getFeaturedTeacher } from '../lib/supabase';
+import { Menu, X, Rocket, User, Bell } from 'lucide-react';
+import { getFeaturedTeacher, getCommunityPosts } from '../lib/supabase';
 import { Profile } from '../types';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [featured, setFeatured] = useState<Profile | null>(null);
+  const [notifCount, setNotifCount] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
-    async function loadFeatured() {
-      const data = await getFeaturedTeacher();
-      setFeatured(data);
+    async function loadData() {
+      // Load featured teacher
+      const fData = await getFeaturedTeacher();
+      setFeatured(fData);
+
+      // Load notifications logic
+      const posts = await getCommunityPosts();
+      const lastSeenCount = parseInt(localStorage.getItem('edu_last_seen_posts') || '0');
+      if (posts.length > lastSeenCount) {
+        setNotifCount(posts.length - lastSeenCount);
+      }
     }
-    loadFeatured();
+    loadData();
   }, []);
+
+  // Clear notifications when visiting community page
+  useEffect(() => {
+    if (location.pathname === '/community') {
+      getCommunityPosts().then(posts => {
+        localStorage.setItem('edu_last_seen_posts', posts.length.toString());
+        setNotifCount(0);
+      });
+    }
+  }, [location.pathname]);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -34,9 +53,14 @@ export const Header: React.FC = () => {
             </Link>
             <Link 
               to="/community" 
-              className={`font-bold transition-colors ${isActive('/community') ? 'text-[#C0272D] underline decoration-4 underline-offset-8' : 'text-[#1A1A1A] hover:text-[#C0272D]'}`}
+              className={`font-bold transition-colors relative ${isActive('/community') ? 'text-[#C0272D] underline decoration-4 underline-offset-8' : 'text-[#1A1A1A] hover:text-[#C0272D]'}`}
             >
               الساحة
+              {notifCount > 0 && (
+                <span className="absolute -top-2 -right-3 bg-[#C0272D] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white animate-bounce">
+                  {notifCount}
+                </span>
+              )}
             </Link>
           </nav>
 
