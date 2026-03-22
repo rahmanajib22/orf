@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { MessageSquare, Calendar, Compass, FileText, ChevronLeft, User, Search, Filter, Heart } from 'lucide-react';
 import { getCommunityPosts, likePost } from '../lib/supabase';
 import { CommunityPost, PostType } from '../types';
@@ -180,9 +181,12 @@ export const Community: React.FC = () => {
                                             <Heart className={`w-4 h-4 ${likedPosts.includes(post.id) ? 'fill-current' : ''}`} />
                                             <span className="font-oswald">{post.likes_count}</span>
                                         </button>
-                                        <button className="bg-[#1A1A1A] text-white p-2 hover:bg-[#C0272D] transition-colors shadow-[2px_2px_0_#C0272D]">
+                                        <Link 
+                                            to={`/community/post/${post.id}`}
+                                            className="bg-[#1A1A1A] text-white p-2 hover:bg-[#C0272D] transition-colors shadow-[2px_2px_0_#C0272D]"
+                                        >
                                             <ChevronLeft className="w-4 h-4" />
-                                        </button>
+                                        </Link>
                                     </div>
                                 </div>
                             </motion.div>

@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { Home } from './pages/Home';
 import { ProfileDetail } from './pages/ProfileDetail';
 import { Community } from './pages/Community';
+import { PostDetail } from './pages/PostDetail';
 import { Header } from './components/Header';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/community/post/:id" element={<PostDetail />} />
               <Route path="/profile/:id" element={<ProfileDetail />} />
             </Routes>
           </AnimatePresence>

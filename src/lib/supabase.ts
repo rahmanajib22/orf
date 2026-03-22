@@ -96,3 +96,23 @@ export async function likePost(postId: string): Promise<void> {
     console.error("Failed to like post", err);
   }
 }
+
+export async function getPostById(id: string): Promise<CommunityPost | null> {
+  try {
+    const { data, error } = await supabase
+      .from('community_posts')
+      .select('*, profiles(name, profile_picture)')
+      .eq('id', id)
+      .single();
+      
+    if (error) throw error;
+    
+    return {
+      ...data,
+      author_name: data.profiles?.name || 'مدرس مجهول',
+      author_image: data.profiles?.profile_picture || 'https://i.pravatar.cc/150'
+    };
+  } catch (err) {
+     return null;
+  }
+}

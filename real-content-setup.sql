@@ -1,42 +1,49 @@
--- 1. First, let's make sure the table has real columns for our content
--- 2. Let's insert real, high-quality content linked to the existing teachers
+-- 1. Create the community_posts table first if it doesn't exist
+CREATE TABLE IF NOT EXISTS community_posts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  author_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  type TEXT CHECK (type IN ('article', 'announcement', 'roadmap')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  image_url TEXT,
+  tags TEXT[] DEFAULT '{}',
+  likes_count INTEGER DEFAULT 0
+);
 
--- Add real content to community_posts
--- NOTE: We are using IDs that match the teachers in your database
--- Ensure you have run the previous community-setup.sql first!
+-- 2. Function to increment likes (to handle concurrent likes safely)
+CREATE OR REPLACE FUNCTION increment_likes(post_id UUID)
+RETURNS void AS $$
+BEGIN
+  UPDATE community_posts
+  SET likes_count = likes_count + 1
+  WHERE id = post_id;
+END;
+$$ LANGUAGE plpgsql;
 
-DELETE FROM community_posts; -- Cleanup old test data
+-- 3. Cleanup any old data to avoid duplication
+DELETE FROM community_posts;
 
+-- 4. INSERT the high-quality real content
 INSERT INTO community_posts (title, content, type, tags, likes_count)
 VALUES 
 (
   'خارطة الطريق الذهبية لتقفيل الفيزياء 2024', 
-  'عشان تقفل الفيزياء لازم تمشي بنظام الـ 3 دوائر: الدائرة الأولى هي التأسيس الرياضي (وحدات القياس والتحويلات)، الدائرة الثانية هي فهم العلاقات الفيزيائية مش حفظ القوانين، والدائرة الثالثة هي حل 30 سؤال متنوع يومياً. ابدأ بالفصل الأول وركز على قانون أوم وقوانين كيرشوف لأنهم أساس المنهج كله. لو ضبطت دول، الباقي هيبقى أسهل بكتير.', 
+  'عشان تقفل الفيزياء لازم تمشي بنظام الـ 3 دوائر: الدائرة الأولى هي التأسيس الرياضي (وحدات القياس والتحويلات)، الدائرة الثانية هي فهم العلاقات الفيزيائية مش حفظ القوانين، والدائرة الثالثة هي حل 30 سؤال متنوع يومياً. ابدأ بالفصل الأول وركز على قانون أوم وقوانين كيرشوف لأنهم أساس المنهج كله.', 
   'roadmap', 
   ARRAY['فيزياء', 'ثانوية عامة', 'نصائح'],
   42
 ),
 (
   'أسرار النحو: ليه بنغلط في الهمزات؟', 
-  'الهمزة المتطرفة والميدانية هي أكتر حاجة بتنقص درجات في التعبير. القاعدة بسيطة: الهمزة تتبع الحركة الأقوى. (الكسرة أقوى من الضمة، والضمة أقوى من الفتحة). لو عرفت تنطق الكلمة صح، هتكتب الهمزة صح 100%. مثلاً كلمة "شاطِئ" كتبت على ياء لأن ما قبلها مكسور، و"سُؤَال" كتبت على واو لأنها مفتوحة وما قبلها مضموم والضمة أقوى.', 
+  'الهمزة المتطرفة والميدانية هي أكتر حاجة بتنقص درجات في التعبير. القاعدة بسيطة: الهمزة تتبع الحركة الأقوى. (الكسرة أقوى من الضمة، والضمة أقوى من الفتحة). لو عرفت تنطق الكلمة صح، هتكتب الهمزة صح 100%. مثلاً كلمة "شاطِئ" كتبت على ياء لأن ما قبلها مكسور.', 
   'article', 
   ARRAY['لغة عربية', 'نحو', 'تأسيس'],
   28
 ),
 (
-  'معسكر الراجعة النهائية لطلاب اللغات', 
-  'تعلن الأكاديمية عن بدء التسجيل في معسكر المراجعة المكثف لمواد العلوم والرياضيات باللغة الإنجليزية. المراجعة هتشمل أهم التريكات المتوقعة في الامتحان، وحل امتحانات السنوات السابقة، وتدريب على الأسئلة المقالية الجديدة. العدد محدود جداً لضمان الجودة!', 
-  'announcement', 
-  ARRAY['لغات', 'مراجعة نهائية', 'رياضيات'],
-  15
-),
-(
   'كيف تذاكر الإنجليزية بذكاء (خطة الـ 90 يوم)', 
-  'الإنجليزي مش كلمات وقواعد بس، الإنجليزي ممارسة. عشان تلم المنهج في 3 شهور: 
-1. خصص ساعة يومياً للـ Vocab وحط الكلمات في جمل من تأليفك.
-2. افهم الـ Grammar كويس وطبق عليه بأسئلة "تحويل الجمل".
-3. اقرأ قطعة واحدة كل يوم وحاول تخمن معاني الكلمات الصعبة. 
-الاستمرارية أهم بكتير من المذاكرة الكتير المتقطعة.', 
+  'الإنجليزي مش كلمات وقواعد بس، الإنجليزي ممارسة. عشان تلم المنهج في 3 شهور: 1. خصص ساعة يومياً للـ Vocab وحط الكلمات في جمل من تأليفك. 2. افهم الـ Grammar كويس وطبق عليه بأسئلة "تحويل الجمل". الاستمرارية أهم بكتير من المذاكرة الكتير المتقطعة.', 
   'roadmap', 
   ARRAY['إنجليزي', 'لغات', 'ثانوية عامة'],
   56
